@@ -38,39 +38,25 @@ REPORT_PATH = REPO_ROOT / "submission" / "phase0_report.json"
 # Functions YOU implement
 # --------------------------------------------------------------------------- #
 def parse_gcloud_config(raw: str) -> dict:
-    """Parse the JSON emitted by ``gcloud config list --format=json``.
-
-    Return ``{"account": <str>, "project": <str>}`` using empty strings when a
-    value is absent. The relevant fields live under the ``"core"`` section, e.g.::
-
-        {"core": {"account": "you@example.com", "project": "my-proj-123"}}
-
-    Args:
-        raw: the raw stdout string from the gcloud command (may be empty).
-    """
-    # TODO: parse `raw` as JSON and return {"account": ..., "project": ...}
-    #       from the "core" section. Return empty strings if raw is empty or a
-    #       field is missing.
-    raise NotImplementedError("Phase 0: implement parse_gcloud_config()")
-
+    data = json.loads(raw)
+    return {
+        "account": data.get("account"),
+        "project": data.get("project"),
+    }
 
 def parse_repo_slug(remote_url: str) -> str:
-    """Turn a GitHub remote URL into an ``owner/repo`` slug (no ``.git`` suffix).
+    url = remote_url.strip().rstrip("/")
 
-    Must handle both forms git prints:
+    if url.endswith(".git"):
+        url = url[:-4]
 
-      * HTTPS: ``https://github.com/eurecom/clouds-lab.git``  -> ``eurecom/clouds-lab``
-      * SSH:   ``git@github.com:eurecom/clouds-lab.git``      -> ``eurecom/clouds-lab``
+    if "://" in url:
+        path = url.split("://", 1)[1]
+        path = path.split("/", 1)[1]
+    else:
+        path = url.split(":", 1)[1]
 
-    Return ``""`` if the URL is empty or not a github.com URL.
-
-    Args:
-        remote_url: output of ``git remote get-url origin`` (may be empty).
-    """
-    # TODO: return "owner/repo" for both the HTTPS and SSH forms shown above.
-    #       Strip any trailing ".git". Return "" if not a github.com URL.
-    raise NotImplementedError("Phase 0: implement parse_repo_slug()")
-
+    return path
 
 # --------------------------------------------------------------------------- #
 # Provided probes (do not modify)

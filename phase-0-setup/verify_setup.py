@@ -38,23 +38,35 @@ REPORT_PATH = REPO_ROOT / "submission" / "phase0_report.json"
 # Functions YOU implement
 # --------------------------------------------------------------------------- #
 def parse_gcloud_config(raw: str) -> dict:
+    if not raw.strip():
+        return {"account": "", "project": ""}
+
     data = json.loads(raw)
+    core = data.get("core", {})
+
     return {
-        "account": data.get("account"),
-        "project": data.get("project"),
+        "account": core.get("account", ""),
+        "project": core.get("project", ""),
     }
 
+
 def parse_repo_slug(remote_url: str) -> str:
-    url = remote_url.strip().rstrip("/")
+    url = remote_url.strip()
 
-    if url.endswith(".git"):
-        url = url[:-4]
+    if not url or "github.com" not in url:
+        return ""
 
-    if "://" in url:
-        path = url.split("://", 1)[1]
-        path = path.split("/", 1)[1]
+    if url.startswith("https://github.com/"):
+        path = url[len("https://github.com/"):]
+    elif url.startswith("git@github.com:"):
+        path = url[len("git@github.com:"):]
     else:
-        path = url.split(":", 1)[1]
+        return ""
+
+    path = path.rstrip("/")
+
+    if path.endswith(".git"):
+        path = path[:-4]
 
     return path
 

@@ -101,6 +101,7 @@ With Cloud Run and your Function both deployed, run `gcloud run services list` a
 **complete output** here, unedited:
 
 <!--answer:run_services_list-->
+```text
 ✔
 SERVICE: echo
 REGION: us-central1
@@ -114,7 +115,8 @@ REGION: us-central1
 URL: https://echo-bot-1090829914449.us-central1.run.app
 LAST DEPLOYED BY: juliane_phalippou@eurecom.fr
 LAST DEPLOYED AT: 2026-10-14T17:32:31.718637Z
-<!--/answer-->
+```
+<!--/answer:run_services_list-->
 
 Now explain what that output tells you about how your Function is actually being run, why its
 cold start resembles Cloud Run's so closely, and what — if anything — genuinely differs between

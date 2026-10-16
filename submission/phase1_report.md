@@ -44,27 +44,15 @@ Copy these from `submission/phase1_report.json`. Cold is `cold_ms`; warm median 
 
 | Platform | Cold (ms) | Warm median (ms) |
 |---|---|---|
-| IaaS VM | <!--answer:vm_cold_ms-->
-252.4
-<!--/answer--> | <!--answer:vm_warm_median_ms-->
-211.1
-<!--/answer--> |
-| Cloud Run | <!--answer:cloudrun_cold_ms-->
-657.9
-<!--/answer--> | <!--answer:cloudrun_warm_median_ms-->
-639.3
-<!--/answer--> |
-| Cloud Function | <!--answer:function_cold_ms-->
-739.4
-<!--/answer--> | <!--answer:function_warm_median_ms-->
-639.5
-<!--/answer--> |
+| IaaS VM | <!--answer:vm_cold_ms-->252.4<!--/answer--> | <!--answer:vm_warm_median_ms-->211.1<!--/answer--> |
+| Cloud Run | <!--answer:cloudrun_cold_ms-->657.9<!--/answer--> | <!--answer:cloudrun_warm_median_ms-->639.3<!--/answer--> |
+| Cloud Function | <!--answer:function_cold_ms-->739.4<!--/answer--> | <!--answer:function_warm_median_ms-->639.5<!--/answer--> |
 
 Include your histogram or plot of the warm distribution below (an image, or the ASCII chart
 `measure.py` prints). This is read by a human, not the grader:
 
 <!--answer:latency_plot-->
-VM:        warm median 211.1 ms
+VM:       warm median 211.1 ms
 Cloud Run: warm median 639.3 ms
 Function:  warm median 639.5 ms
 <!--/answer-->
@@ -85,14 +73,14 @@ hundred. For each of the three platforms, answer concretely:
 to the second question.)
 
 <!--answer:scaling_behaviour-->
-Sur la VM, rien n’est créé automatiquement : le même conteneur reste lancé sur la machine e2-micro. La limite vient surtout de la taille de cette machine. Cloud Run peut créer plusieurs instances automatiquement selon le trafic, avec une limite fixée à 3 instances par --max-instances=3. La Cloud Function gen 2 peut aussi créer plusieurs instances automatiquement pour traiter les requêtes. Elle utilise l’infrastructure Cloud Run.
+On the VM, nothing is created automatically: the same container keeps running on the e2-micro machine. The limit mainly comes from the machine size. Cloud Run can automatically create several instances when traffic increases, with a limit of 3 instances set by --max-instances=3. The gen 2 Cloud Function can also create several instances automatically to handle requests. It runs on Cloud Run infrastructure.
 <!--/answer-->
 
 **Deployment effort.** What did you have to build, configure and maintain to get each of the
 three running? (~100 words)
 
 <!--answer:deployment_effort-->
-Pour la VM, j’ai créé le réseau, le sous-réseau, les règles firewall, la machine, puis installé Docker et lancé le conteneur. Il faut aussi maintenir la machine et son adresse IP. Pour Cloud Run, j’ai construit et poussé l’image, puis créé le service avec le port 8080 et l’accès public. Pour la Cloud Function, j’ai déployé le code source avec main.py comme point d’entrée. Cloud Run et la Function demandent moins de maintenance que la VM.
+For the VM, I created the network, subnet and firewall rules, then created the machine, installed Docker and started the container. The machine and its IP address also need to be maintained. For Cloud Run, I built and pushed the image, then created the service with port 8080 and public access. For the Cloud Function, I deployed the source code with main.py as the entry point. Cloud Run and the Function require less maintenance than the VM.
 <!--/answer-->
 
 ---
@@ -123,5 +111,4 @@ cold start resembles Cloud Run's so closely, and what — if anything — genuin
 the two deployment paths. (~120 words)
 
 <!--answer:convergence_explanation-->
-La liste montre deux services Cloud Run : echo-bot est mon déploiement direct, tandis que echo est le service créé automatiquement pour la Cloud Function gen 2. Cela explique pourquoi les latences de Cloud Run et de la Function sont proches : les deux utilisent une infrastructure basée sur des conteneurs Cloud Run et peuvent démarrer à la demande. La différence est le déploiement : Cloud Run utilise directement mon image Docker, alors que la Function part du code source et Google construit l’image automatiquement.
-<!--/answer-->
+The list shows two Cloud Run services: echo-bot is my direct Cloud Run deployment, while echo is the service automatically created for the gen 2 Cloud Function. This explains why the Cloud Run and Function latencies are similar: both use container-based Cloud Run infrastructure and can start on demand. The deployment process is different: Cloud Run uses my Docker image directly, while the Function starts from source code and Google builds the image automatically.<!--/answer-->

@@ -116,11 +116,12 @@ URL: https://echo-bot-1090829914449.us-central1.run.app
 LAST DEPLOYED BY: juliane_phalippou@eurecom.fr
 LAST DEPLOYED AT: 2026-10-14T17:32:31.718637Z
 ```
-<!--/answer:run_services_list-->
+<!--/answer-->
 
 Now explain what that output tells you about how your Function is actually being run, why its
 cold start resembles Cloud Run's so closely, and what — if anything — genuinely differs between
 the two deployment paths. (~120 words)
 
 <!--answer:convergence_explanation-->
-The list shows two Cloud Run services: echo-bot is my direct Cloud Run deployment, while echo is the service automatically created for the gen 2 Cloud Function. This explains why the Cloud Run and Function latencies are similar: both use container-based Cloud Run infrastructure and can start on demand. The deployment process is different: Cloud Run uses my Docker image directly, while the Function starts from source code and Google builds the image automatically.<!--/answer-->
+The list shows two Cloud Run services: echo-bot is my direct Cloud Run deployment, while echo is the service automatically created for the gen 2 Cloud Function. This explains why the Cloud Run and Function latencies are similar: both use container-based Cloud Run infrastructure and can start on demand. The deployment process is different: Cloud Run uses my Docker image directly, while the Function starts from source code and Google builds the image automatically.
+<!--/answer-->

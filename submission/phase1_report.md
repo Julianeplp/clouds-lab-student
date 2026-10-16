@@ -52,7 +52,6 @@ Include your histogram or plot of the warm distribution below (an image, or the 
 `measure.py` prints). This is read by a human, not the grader:
 
 <!--answer:latency_plot-->
-```text
 Warm latency distribution (milliseconds)
 
 Platform       Min     Median     P95     Max
@@ -64,7 +63,6 @@ Median comparison:
 VM             | ████████████████████ 211.1 ms
 Cloud Run      | ████████████████████████████████████████████████████████ 639.3 ms
 Cloud Function | ████████████████████████████████████████████████████████ 639.5 ms
-```
 <!--/answer-->
 
 ---

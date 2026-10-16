@@ -52,13 +52,19 @@ Include your histogram or plot of the warm distribution below (an image, or the 
 `measure.py` prints). This is read by a human, not the grader:
 
 <!--answer:latency_plot-->
-| Platform | Warm median latency |
-|---|---:|
-| VM | 211.1 ms |
-| Cloud Run | 639.3 ms |
-| Cloud Function | 639.5 ms |
+```text
+Warm latency distribution (milliseconds)
 
-Cloud Run and the Cloud Function have almost identical warm latencies, while the VM is faster.
+Platform       Min     Median     P95     Max
+VM             207.9   211.1      215.3   215.4
+Cloud Run      124.5   639.3      683.6   684.8
+Cloud Function 123.5   639.5      684.7   750.3
+
+Median comparison:
+VM             | ████████████████████ 211.1 ms
+Cloud Run      | ████████████████████████████████████████████████████████ 639.3 ms
+Cloud Function | ████████████████████████████████████████████████████████ 639.5 ms
+```
 <!--/answer-->
 
 ---

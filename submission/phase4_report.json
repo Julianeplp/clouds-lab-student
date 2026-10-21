@@ -1,0 +1,27 @@
+{
+  "phase": "4",
+  "chat_url": "https://chat-afytsrrmqq-uc.a.run.app",
+  "ui_url": "https://storage.googleapis.com/eurecomgpt-juliane-eurecomgpt/index.html",
+  "before": {
+    "session_id": "grade-fc90dd",
+    "chat_replies": 3,
+    "instance": "11b59484",
+    "store": "memory",
+    "history_status": 200,
+    "message_count": 6
+  },
+  "sample": {
+    "question": "love and death",
+    "reply": " be to thou talk of Warwickly, fare,\nWith shall apper he that and dreams without",
+    "retrieved": [
+      45,
+      26,
+      33
+    ]
+  },
+  "after": {
+    "instance": "0cd1356a",
+    "history_status": 404,
+    "message_count": 0
+  }
+}

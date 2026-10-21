@@ -1,0 +1,30 @@
+{
+  "phase": "2",
+  "environment": {
+    "colab": true
+  },
+  "attention": {
+    "naive_ms": 419.046,
+    "vectorized_ms": 1.208,
+    "speedup": 346.89
+  },
+  "threads": {
+    "1": 4712.928,
+    "2": 2167.307,
+    "4": 2207.208,
+    "8": 2419.466
+  },
+  "devices": {
+    "cpu_ms": 437578.1,
+    "gpu_ms": 12753.8
+  },
+  "training": {
+    "steps": 2000,
+    "final_loss": 1.455,
+    "param_count": 4935680
+  },
+  "sample": "\nLIDONUS:\nThere's such down, like give with torach with the\nend I say he methis; that treason\nSking, forgeal will way which my survest.\n\nDUCIESSTrenge:\nA 'tword,--within me.\n\nSecond Senator:\nWe set not",
+  "model": {
+    "gcs_url": "https://storage.googleapis.com/eurecomgpt-juliane-eurecomgpt/model.safetensors"
+  }
+}

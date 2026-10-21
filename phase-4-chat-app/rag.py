@@ -46,57 +46,20 @@ from __future__ import annotations
 
 
 def rank_topk(tfidf_rows: list[tuple[str, int, float]], k: int = 3) -> list[int]:
-    """Rank documents for a query and return the top-k ``doc_id``s (best first).
+    scores = {}
 
-    ``tfidf_rows`` are ``(term, doc_id, tfidf)`` triples, one per (query term, document) pair
-    in which that term occurs. They are **already filtered to the query's terms** — the
-    BigQuery ``WHERE term IN (...)`` did that — so this function never sees the query text,
-    only the evidence for it. A row means "term appears in doc with this weight".
+    for term, doc_id, tfidf in tfidf_rows:
+        scores[doc_id] = scores.get(doc_id, 0.0) + tfidf
 
-    Three steps:
+    ranked = sorted(
+        scores,
+        key=lambda doc_id: (-scores[doc_id], doc_id)
+    )
 
-    1. **Score each document by the SUM of its tfidf over the rows.** A document that
-       contains several query terms, or contains them with high weight, accumulates a high
-       score. (Sum, not max: two medium matches should beat one strong one.) This is a
-       read-modify-write into a dict keyed by ``doc_id`` — the same shape as Phase 3's
-       ``reduce_wc``.
-    2. **Sort documents by score, highest first, ties broken by ascending ``doc_id``.** The
-       tie-break makes the result deterministic; without it two equal-score documents could
-       come out in either order and the tests (and your prompts) would be flaky.
-    3. **Return the first ``k`` ids** — ids only, no scores. Fewer than ``k`` if fewer
-       documents matched; an empty list if ``tfidf_rows`` is empty.
-
-    Example: rows ``("king", 12, 4.1), ("king", 7, 2.9), ("crown", 12, 3.3)`` with ``k=2``
-    -> scores {12: 7.4, 7: 2.9} -> ``[12, 7]``.
-    """
-    # TODO: sum tfidf per doc_id, sort by score descending (ties by doc_id), return top-k ids.
-    raise NotImplementedError("Phase 4: implement rank_topk()")
+    return ranked[:k]
 
 
 def build_rag_prompt(query: str, context_texts: list[str]) -> str:
-    """Build the model prompt: prepend the retrieved context, then the user's query.
+    context = "\n\n".join(context_texts)
 
-    ``query`` is the user's message, verbatim. ``context_texts`` are the **full texts of the
-    documents ``rank_topk`` chose**, best match first — ``retrieval.retrieve`` mapped the
-    winning ``doc_id``s back to their text with ``load_corpus`` (each is one 40-line chunk of
-    TinyShakespeare, Phase 3's document unit). Usually ``k`` = 3 of them; possibly fewer, or
-    none at all if the message had no content words (then the prompt has an empty Context
-    section and the model answers from its weights alone).
-
-    This is the "augmented" in RAG: the model never saw these documents at inference time
-    until you put them in front of the question. Return a string of the form::
-
-        Context:
-        <doc 1>
-
-        <doc 2>
-
-        User: <query>
-        Assistant:
-
-    — the texts joined by a blank line under a ``Context:`` header, then the query on a
-    ``User:`` line, then a bare ``Assistant:`` line that the model continues from.
-    """
-    # TODO: join context_texts with blank lines under a "Context:" header, then add
-    #       "User: <query>" and a final "Assistant:" line.
-    raise NotImplementedError("Phase 4: implement build_rag_prompt()")
+    return f"Context:\n{context}\n\nUser: {query}\nAssistant:"

@@ -1,0 +1,43 @@
+{
+  "phase": "5",
+  "environment": {
+    "cloud_shell": true
+  },
+  "project": "eurecomgpt-juliane",
+  "chat_url": "https://chat-afytsrrmqq-uc.a.run.app",
+  "acid": {
+    "with_txn": {
+      "sent": 20,
+      "final_count": 20
+    },
+    "without_txn": {
+      "sent": 20,
+      "final_count": 2
+    }
+  },
+  "proof": {
+    "session_id": "proof-0f55bd",
+    "messages_sent": 5,
+    "message_texts": [
+      "written from Cloud Shell 0",
+      "written from Cloud Shell 1",
+      "written from Cloud Shell 2",
+      "written from Cloud Shell 3",
+      "written from Cloud Shell 4"
+    ],
+    "message_count": 5,
+    "messages_listed": 5,
+    "via_chat_endpoint": {
+      "status": 200,
+      "store": "firestore",
+      "message_count": 5,
+      "all_texts_seen": true
+    },
+    "chat_turn": {
+      "count_before": 5,
+      "count_after": 7,
+      "store": "firestore",
+      "instance": "3718c302"
+    }
+  }
+}

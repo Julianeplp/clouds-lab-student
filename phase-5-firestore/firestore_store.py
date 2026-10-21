@@ -62,49 +62,26 @@ def create_session(db, session_id: str) -> None:
 
 
 def _apply(transaction, session_ref, msg_ref, role: str, text: str, now: str) -> str:
-    """Transaction body: append the message AND bump the session counter, atomically.
+    snapshot = session_ref.get(transaction=transaction)
 
-    Called by the Firestore client library (via ``run_in_transaction``), not by you — possibly
-    several times for one ``send_message`` if a concurrent writer forces a retry. It must do
-    ONLY reads and writes through ``transaction``; no prints, no other side effects.
+    data = snapshot.to_dict() or {}
+    count = data.get("message_count", 0)
 
-    Arguments — all prepared by ``send_message``:
+    transaction.set(
+        msg_ref,
+        {
+            "role": role,
+            "text": text,
+            "created_at": now
+        }
+    )
 
-    ``transaction``
-        The open transaction. Every read goes through it (``ref.get(transaction=transaction)``)
-        and every write is a method on it (``transaction.set(ref, data)``,
-        ``transaction.update(ref, fields)``). Nothing is written when these lines run — the
-        writes are queued and applied at commit, all or none. On the fake it is a
-        ``FakeTransaction`` with the same three methods.
-    ``session_ref``
-        A ``DocumentReference`` to ``sessions/{session_id}``. Its document holds
-        ``message_count`` — the field you read, add 1 to, and write back. It usually exists
-        (``create_session`` or a previous send made it); treat a missing document or a missing
-        field as a count of 0.
-    ``msg_ref``
-        A ``DocumentReference`` to ``sessions/{session_id}/messages/{auto_id}`` — a new id was
-        generated but **no document exists yet**; ``transaction.set(msg_ref, ...)`` creates it.
-    ``role``, ``text``
-        The message: ``"user"`` or ``"assistant"``, and its content. Stored verbatim.
-    ``now``
-        An ISO-8601 UTC timestamp string, stamped once by ``send_message`` so a retried
-        transaction stores the same time.
+    transaction.update(
+        session_ref,
+        {"message_count": count + 1}
+    )
 
-    Returns ``msg_ref.id`` (the auto-generated message id) — ``send_message`` passes it back
-    to its caller.
-
-    Why the read must be inside the transaction: ``run_phase5.py``'s "naive" version reads the
-    counter *outside*, then writes — and two concurrent sends both read 5 and both write 6,
-    losing an update. Inside the transaction, Firestore notices the conflict and retries one of
-    them, so the second reads 6 and writes 7.
-    """
-    # TODO:
-    #   1. read the session snapshot via session_ref.get(transaction=transaction)
-    #   2. count = its "message_count" (0 if the field/doc is missing)
-    #   3. transaction.set(msg_ref, {"role": role, "text": text, "created_at": now})
-    #   4. transaction.update(session_ref, {"message_count": count + 1})
-    #   5. return msg_ref.id
-    raise NotImplementedError("Phase 5: implement _apply()")
+    return msg_ref.id
 
 
 def run_in_transaction(db, func, *, rounds: int = 6):
